@@ -15,7 +15,7 @@ module HVAC
           style: UI::HtmlDialog::STYLE_UTILITY
         })
         @dialog.set_size(1000,1000)
-        path = Sketchup.find_support_file("bz_redvent/UI/index.html","Plugins")
+        path = Sketchup.find_support_file("bz_redvent/UI/page.html","Plugins")
         @dialog.set_file path
         @dialog.show
         

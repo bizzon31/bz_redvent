@@ -165,7 +165,7 @@ $(document).ready(function(){
             s = $(this).siblings().filter('*[id*=row-square]')[0].textContent
             l_p = 30 + 25 * Math.log10(v) + Math.log10(s)
             
-            this.textContent = l_p.toFixed(0)
+            this.textContent = l_p.toFixed(0) - 5
             // console.log(l_p)
         })
         $('*[id*=row-mid-l]').each(function(){
@@ -173,7 +173,7 @@ $(document).ready(function(){
             s = $(this).siblings().filter('*[id*=row-square]')[0].textContent
             l_p = 30 + 25 * Math.log10(v) + Math.log10(s)
             
-            this.textContent = l_p.toFixed(0)
+            this.textContent = l_p.toFixed(0) - 5 
             // console.log(l_p)
         })
         $('*[id*=row-min-l]').each(function(){
@@ -181,7 +181,7 @@ $(document).ready(function(){
             s = $(this).siblings().filter('*[id*=row-square]')[0].textContent
             l_p = 30 + 25 * Math.log10(v) + Math.log10(s)
             
-            this.textContent = l_p.toFixed(0)
+            this.textContent = l_p.toFixed(0) - 5
             // console.log(l_p)
         })
     }
@@ -198,7 +198,7 @@ $(document).ready(function(){
             this.textContent = arr_args[1].toFixed(2)
             $(this).siblings().filter('*[id*=row-max-jet-05]')[0].textContent = arr_args[0].toFixed(2)
             
-            console.log(`v_max: ${v_max} | width_dif: ${width_dif} | l 0,2: ${arr_args[0].toFixed(2)} | l 0,5: ${arr_args[1].toFixed(2)} `)
+            // console.log(`v_max: ${v_max} | width_dif: ${width_dif} | l 0,2: ${arr_args[0].toFixed(2)} | l 0,5: ${arr_args[1].toFixed(2)} `)
         })
         $('*[id*=row-mid-jet-02]').each(function(){
             
@@ -210,7 +210,7 @@ $(document).ready(function(){
             this.textContent = arr_args[1].toFixed(2)
             $(this).siblings().filter('*[id*=row-mid-jet-05]')[0].textContent = arr_args[0].toFixed(2)
             
-            console.log(`v_mid: ${v_max} | width_dif: ${width_dif} | l 0,2: ${arr_args[0].toFixed(2)} | l 0,5: ${arr_args[1].toFixed(2)} `)
+            // console.log(`v_mid: ${v_max} | width_dif: ${width_dif} | l 0,2: ${arr_args[0].toFixed(2)} | l 0,5: ${arr_args[1].toFixed(2)} `)
         })
         $('*[id*=row-min-jet-02]').each(function(){
             
@@ -222,7 +222,7 @@ $(document).ready(function(){
             this.textContent = arr_args[1].toFixed(2)
             $(this).siblings().filter('*[id*=row-min-jet-05]')[0].textContent = arr_args[0].toFixed(2)
             
-            console.log(`v_min: ${v_max} | width_dif: ${width_dif} | l 0,2: ${arr_args[0].toFixed(2)} | l 0,5: ${arr_args[1].toFixed(2)} `)
+            // console.log(`v_min: ${v_max} | width_dif: ${width_dif} | l 0,2: ${arr_args[0].toFixed(2)} | l 0,5: ${arr_args[1].toFixed(2)} `)
         })
     }
     // Формула расчёта длины струи, где vx =0,5 м/с и vx =0,2 м/с.
@@ -240,6 +240,88 @@ $(document).ready(function(){
         return arr_args
         
     }
+    // Анализ расчётов
+    function analizTbl(){
+        // по скорости и шуму
+        $('*[id*=row-max-v]').each(function(){
+            v = this.textContent
+
+            if(v <= 4 && v >= 2){
+                $(this).addClass('text-danger') 
+            }else{
+                $(this).removeClass('text-danger')
+                $(this).addClass('text-info')
+            }
+        })
+        $('*[id*=row-mid-v]').each(function(){
+            v = this.textContent
+            if(v <= 3 && v >= 1.5){
+                $(this).addClass('text-danger') 
+            }else{
+                $(this).removeClass('text-danger')
+                $(this).addClass('text-info')
+            }
+        })
+        $('*[id*=row-min-v]').each(function(){
+            v = this.textContent
+            if(v <= 2 && v >= 1){
+                $(this).addClass('text-danger') 
+            }else{
+                $(this).removeClass('text-danger')
+                $(this).addClass('text-info')
+            }
+        })
+        // по шуму
+        $('*[id*=row-max-l]').each(function(){
+            l = this.textContent
+            if(l <= 40 && l >= 30){
+                $(this).addClass('text-danger') 
+            }else{
+                $(this).removeClass('text-danger')
+            }
+        })
+        $('*[id*=row-mid-l]').each(function(){
+            l = this.textContent
+            if(l <= 35 && l >= 25){
+                $(this).addClass('text-danger') 
+            }else{
+                $(this).removeClass('text-danger')
+            }
+        })
+        $('*[id*=row-min-l]').each(function(){
+            l = this.textContent
+            if(l <= 30 && l >= 20){
+                $(this).addClass('text-danger') 
+            }else{
+                $(this).removeClass('text-danger')
+            }
+        })
+    }
+    // Выделение, в таблице, соответствующих диффузоров, на основе анализа данных
+    function selectDiffTbl(){
+        $('*[id*=row-num]').each(function(){
+            n = 0
+            $(this).siblings().each(function(){
+                str = 'text-danger'
+                arr_cls = $(this).hasClass(str)
+                if(arr_cls){
+                    n = n + 1
+                }
+            })
+            
+            console.log(n)
+            if(n == 6){
+                $(this).siblings().each(function(){
+                    console.log($(this))
+                    $(this).addClass('table-active')
+                })
+            }else{
+                $(this).siblings().each(function(){
+                    $(this).removeClass('table-active')
+                })
+            }
+        })
+    }
     // Обновление данных в таблице
     function updateTable(){
         updateTblQ()
@@ -250,6 +332,8 @@ $(document).ready(function(){
         updatelostPressure()
         soundChartbl()
         lengthJetTbl()
+        analizTbl()
+        selectDiffTbl()
     }
     
     // Событие на изменения в поле диаметр
